@@ -31,6 +31,22 @@ public class App {
         System.out.println("Podaj plik");
         String fileName = sc.nextLine();
 
+        makeListFromFile(fileName, list);
+        Map<String, Integer> note = makeMapFromList(list);
+        printStats(note);
+
+    }
+
+    private static Map<String, Integer> makeMapFromList(List<String> list) throws NumberFormatException {
+        Map<String, Integer> note = new HashMap<>();
+        for (String row : list) {
+            String[] element = row.split(";");
+            note.put(element[0], Integer.valueOf(element[1]));
+        }
+        return note;
+    }
+
+    private static void makeListFromFile(String fileName, List<String> list) {
         try (
                 var fileReader = new FileReader(fileName);
                 var reader = new BufferedReader(fileReader);) {
@@ -41,24 +57,16 @@ public class App {
         } catch (IOException e) {
             System.out.println("no such file");
         }
-
-        Map<String, Integer> note = new HashMap<>();
-        for (String row : list) {
-            String[] element = row.split(";");
-            note.put(element[0], Integer.valueOf(element[1]));
-        }
-        printStats(note);
-        
-
     }
-    private static void printStats(Map<String,Integer> map){
-        map.forEach((k,v) -> {
-            System.out.printf("%-25s(%d) %s\n",k,v,printStars(v));
+
+    private static void printStats(Map<String, Integer> map) {
+        map.forEach((k, v) -> {
+            System.out.printf("%-25s(%d) %s\n", k, v, printStars(v));
         });
     }
-    
-    private static String printStars(int stars){
-        int round=(stars+5)/10;
-        return String.join("", Collections.nCopies(round,"*"));
+
+    private static String printStars(int stars) {
+        int round = (stars + 5) / 10;
+        return String.join("", Collections.nCopies(round, "*"));
     }
 }

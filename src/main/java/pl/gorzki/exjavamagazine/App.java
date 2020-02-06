@@ -9,10 +9,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.BiConsumer;
 
 /**
  *
@@ -30,9 +32,9 @@ public class App {
         String fileName = sc.nextLine();
 
         try (
-                  var fileReader = new FileReader(fileName);
-                  var reader = new BufferedReader(fileReader);) {
-            String nextLine = null;
+                var fileReader = new FileReader(fileName);
+                var reader = new BufferedReader(fileReader);) {
+            String nextLine;
             while ((nextLine = reader.readLine()) != null) {
                 list.add(nextLine);
             }
@@ -45,7 +47,18 @@ public class App {
             String[] element = row.split(";");
             note.put(element[0], Integer.valueOf(element[1]));
         }
+        printStats(note);
         
 
+    }
+    private static void printStats(Map<String,Integer> map){
+        map.forEach((k,v) -> {
+            System.out.printf("%-25s(%d) %s\n",k,v,printStars(v));
+        });
+    }
+    
+    private static String printStars(int stars){
+        int round=(stars+5)/10;
+        return String.join("", Collections.nCopies(round,"*"));
     }
 }
